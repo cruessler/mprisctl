@@ -1,0 +1,8 @@
+[package]
+name = "mprisctl"
+version = "0.1.0"
+authors = ["Christoph Rüßler <christoph.ruessler@mailbox.org>"]
+
+[dependencies]
+dbus = "0.5.3"
+clap = "2.26.0"
