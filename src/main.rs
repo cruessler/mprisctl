@@ -1,8 +1,8 @@
-#[macro_use]
 extern crate clap;
 extern crate dbus;
 
 use std::fmt;
+use clap::{App, Arg};
 use dbus::{BusType, Connection, Message};
 
 #[derive(Debug)]
@@ -88,13 +88,22 @@ fn get_players(conn: &Connection) -> Vec<Player> {
 fn main() {
     let conn = Connection::get_private(BusType::Session).expect("Could not get DBUS connection");
 
-    let matches = clap_app!(mprisctl =>
-        (version: env!("CARGO_PKG_VERSION")
-        (author: "Christoph Rüßler <christoph.ruessler@mailbox.org>")
-        (about: "Sends commands to MPRIS enabled players via DBUS")
-        (@arg list_all: -l --("list-all") "List the names of players that can be controlled")
-        (@arg COMMAND: "play-pause|play|pause|stop|next")
-    ).get_matches();
+    let matches = App::new("MPRISctl")
+        .version(env!("CARGO_PKG_VERSION"))
+        .author("Christoph Rüßler <christoph.ruessler@mailbox.org>")
+        .about("Sends commands to MPRIS enabled players via DBUS")
+        .arg(
+            Arg::with_name("list_all")
+                .short("l")
+                .long("list-all")
+                .help("List the names of players that can be controlled"),
+        )
+        .arg(
+            Arg::with_name("COMMAND")
+                .possible_values(&["play-pause", "play", "pause", "stop", "next"])
+                .help("The command to send to the player"),
+        )
+        .get_matches();
 
     if matches.is_present("list_all") {
         for p in get_players(&conn) {
