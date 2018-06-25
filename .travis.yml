@@ -1,2 +1,8 @@
 language: rust
 cache: cargo
+
+# See https://github.com/diwic/dbus-rs/tree/350ca9bfa88e6e1964d3a0d4a128d63a885eb3f7#requirements
+addons:
+  apt:
+    packages:
+      - libdbus-1-dev
