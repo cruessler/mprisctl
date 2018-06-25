@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cruessler/mprisctl.svg?branch=master)](https://travis-ci.org/cruessler/mprisctl)
+
 # MPRISctl
 
 MPRISctl is a small command line utility for controlling MPRIS-enabled media
