@@ -2,6 +2,7 @@
 name = "mprisctl"
 version = "0.1.1"
 authors = ["Christoph Rüßler <christoph.ruessler@mailbox.org>"]
+edition = "2018"
 
 [dependencies]
 dbus = "0.5.3"

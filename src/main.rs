@@ -1,6 +1,3 @@
-extern crate clap;
-extern crate dbus;
-
 use clap::{App, Arg};
 use dbus::{BusType, Connection, Message};
 use std::fmt;
@@ -12,7 +9,7 @@ struct Player<'a> {
 }
 
 impl<'a> fmt::Display for Player<'a> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.name)
     }
 }
@@ -63,7 +60,7 @@ impl<'a> Command for Player<'a> {
     }
 }
 
-fn get_players(conn: &Connection) -> Vec<Player> {
+fn get_players(conn: &Connection) -> Vec<Player<'_>> {
     let message = Message::new_method_call(
         "org.freedesktop.DBus",
         "/",
