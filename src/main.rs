@@ -1,9 +1,9 @@
 extern crate clap;
 extern crate dbus;
 
-use std::fmt;
 use clap::{App, Arg};
 use dbus::{BusType, Connection, Message};
+use std::fmt;
 
 #[derive(Debug)]
 struct Player<'a> {
@@ -34,7 +34,8 @@ impl<'a> Command for Player<'a> {
             "/org/mpris/MediaPlayer2",
             "org.mpris.MediaPlayer2.Player",
             command,
-        ).expect("Could not create message");
+        )
+        .expect("Could not create message");
 
         self.conn
             .send_with_reply_and_block(message, 2_000)
@@ -68,7 +69,8 @@ fn get_players(conn: &Connection) -> Vec<Player> {
         "/",
         "org.freedesktop.DBus",
         "ListNames",
-    ).expect("Could not create message");
+    )
+    .expect("Could not create message");
 
     conn.send_with_reply_and_block(message, 2_000)
         .expect("Could not send message")
@@ -76,11 +78,9 @@ fn get_players(conn: &Connection) -> Vec<Player> {
         .expect("Could not get payload")
         .into_iter()
         .filter(|name| name.starts_with("org.mpris.MediaPlayer2."))
-        .map(|name| {
-            Player {
-                name: String::from(name),
-                conn: conn,
-            }
+        .map(|name| Player {
+            name: String::from(name),
+            conn: conn,
         })
         .collect::<Vec<_>>()
 }
