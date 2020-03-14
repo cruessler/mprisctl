@@ -3,11 +3,13 @@ cache: cargo
 
 before_script:
 - rustup component add rustfmt
+- rustup component add clippy
 
 script:
 - cargo build
 - cargo test
 - cargo fmt -- --check
+- cargo clippy -- -D clippy::all
 
 # See https://github.com/diwic/dbus-rs/tree/350ca9bfa88e6e1964d3a0d4a128d63a885eb3f7#requirements
 addons:

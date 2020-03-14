@@ -77,7 +77,7 @@ fn get_players(conn: &Connection) -> Vec<Player<'_>> {
         .filter(|name| name.starts_with("org.mpris.MediaPlayer2."))
         .map(|name| Player {
             name: String::from(name),
-            conn: conn,
+            conn,
         })
         .collect::<Vec<_>>()
 }
@@ -106,19 +106,17 @@ fn main() {
         for p in get_players(&conn) {
             println!("{}", p);
         }
-    } else {
-        if let Some(ref first) = get_players(&conn).first() {
-            match matches.value_of("COMMAND") {
-                Some("play-pause") => first.play_pause(),
-                Some("play") => first.play(),
-                Some("pause") => first.pause(),
-                Some("stop") => first.stop(),
-                Some("next") => first.next(),
+    } else if let Some(ref first) = get_players(&conn).first() {
+        match matches.value_of("COMMAND") {
+            Some("play-pause") => first.play_pause(),
+            Some("play") => first.play(),
+            Some("pause") => first.pause(),
+            Some("stop") => first.stop(),
+            Some("next") => first.next(),
 
-                _ => println!("Unknown command"),
-            }
-        } else {
-            println!("No player found")
+            _ => println!("Unknown command"),
         }
+    } else {
+        println!("No player found")
     }
 }
