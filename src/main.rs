@@ -1,5 +1,6 @@
 use clap::{App, Arg};
-use dbus::{BusType, Connection, Message};
+use dbus::ffidisp::{BusType, Connection};
+use dbus::Message;
 use std::fmt;
 
 #[derive(Debug)]
