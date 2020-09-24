@@ -5,5 +5,5 @@ authors = ["Christoph Rüßler <christoph.ruessler@mailbox.org>"]
 edition = "2018"
 
 [dependencies]
-dbus = "0.8.2"
+dbus = "0.9.0"
 clap = "2.26.0"
