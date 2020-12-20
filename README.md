@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/cruessler/mprisctl.svg?branch=master)](https://travis-ci.org/cruessler/mprisctl)
+[![Build Status](https://github.com/cruessler/mprisctl/workflows/build/badge.svg)](https://github.com/cruessler/mprisctl/actions?query=workflow%3Abuild)
 
 # MPRISctl
 

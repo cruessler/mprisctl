@@ -3,7 +3,7 @@
 # [release-yml]: https://github.com/paskausks/rust-bin-github-workflows/blob/894a4f2debade42f8d7b5b95f493eaa33fdeb81b/.github/workflows/release.yml
 on: push
 
-name: Build and test
+name: build
 
 jobs:
   build:
