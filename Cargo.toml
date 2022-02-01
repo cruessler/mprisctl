@@ -6,4 +6,4 @@ edition = "2018"
 
 [dependencies]
 dbus = "0.9.0"
-clap = "2.26.0"
+clap = "3.0.13"
