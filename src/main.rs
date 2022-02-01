@@ -91,13 +91,13 @@ fn main() {
         .author("Christoph Rüßler <christoph.ruessler@mailbox.org>")
         .about("Sends commands to MPRIS enabled players via DBUS")
         .arg(
-            Arg::with_name("list_all")
-                .short("l")
+            Arg::new("list_all")
+                .short('l')
                 .long("list-all")
                 .help("List the names of players that can be controlled"),
         )
         .arg(
-            Arg::with_name("COMMAND")
+            Arg::new("COMMAND")
                 .possible_values(&["play-pause", "play", "pause", "stop", "next"])
                 .help("The command to send to the player"),
         )
