@@ -107,7 +107,7 @@ fn main() {
         for p in get_players(&conn) {
             println!("{}", p);
         }
-    } else if let Some(ref first) = get_players(&conn).first() {
+    } else if let Some(first) = get_players(&conn).first() {
         match matches.value_of("COMMAND") {
             Some("play-pause") => first.play_pause(),
             Some("play") => first.play(),
