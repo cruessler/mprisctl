@@ -1,4 +1,4 @@
-use clap::{App, Arg};
+use clap::Arg;
 use dbus::ffidisp::{BusType, Connection};
 use dbus::Message;
 use std::fmt;
@@ -83,10 +83,8 @@ fn get_players(conn: &Connection) -> Vec<Player<'_>> {
         .collect::<Vec<_>>()
 }
 
-fn main() {
-    let conn = Connection::get_private(BusType::Session).expect("Could not get DBUS connection");
-
-    let matches = App::new("MPRISctl")
+fn cli_command() -> clap::Command<'static> {
+    clap::Command::new("MPRISctl")
         .version(env!("CARGO_PKG_VERSION"))
         .author("Christoph Rüßler <christoph.ruessler@mailbox.org>")
         .about("Sends commands to MPRIS enabled players via DBUS")
@@ -101,7 +99,13 @@ fn main() {
                 .possible_values(&["play-pause", "play", "pause", "stop", "next"])
                 .help("The command to send to the player"),
         )
-        .get_matches();
+}
+
+fn main() {
+    let conn = Connection::get_private(BusType::Session).expect("Could not get DBUS connection");
+
+    let command = cli_command();
+    let matches = command.get_matches();
 
     if matches.is_present("list_all") {
         for p in get_players(&conn) {
@@ -120,4 +124,9 @@ fn main() {
     } else {
         println!("No player found")
     }
+}
+
+#[test]
+fn verify_cli() {
+    cli_command().debug_assert();
 }
