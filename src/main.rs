@@ -1,4 +1,4 @@
-use clap::Arg;
+use clap::{Arg, ArgAction};
 use dbus::ffidisp::{BusType, Connection};
 use dbus::Message;
 use std::fmt;
@@ -92,12 +92,14 @@ fn cli_command() -> clap::Command<'static> {
             Arg::new("list_all")
                 .short('l')
                 .long("list-all")
-                .help("List the names of players that can be controlled"),
+                .help("List the names of players that can be controlled")
+                .action(ArgAction::SetTrue),
         )
         .arg(
             Arg::new("COMMAND")
-                .possible_values(&["play-pause", "play", "pause", "stop", "next"])
-                .help("The command to send to the player"),
+                .value_parser(["play-pause", "play", "pause", "stop", "next"])
+                .help("The command to send to the player")
+                .action(ArgAction::Set),
         )
 }
 
@@ -107,12 +109,12 @@ fn main() {
     let command = cli_command();
     let matches = command.get_matches();
 
-    if matches.is_present("list_all") {
+    if matches.contains_id("list_all") {
         for p in get_players(&conn) {
             println!("{}", p);
         }
     } else if let Some(first) = get_players(&conn).first() {
-        match matches.value_of("COMMAND") {
+        match matches.get_one::<String>("COMMAND").map(|s| s.as_str()) {
             Some("play-pause") => first.play_pause(),
             Some("play") => first.play(),
             Some("pause") => first.pause(),
