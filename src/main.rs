@@ -83,7 +83,7 @@ fn get_players(conn: &Connection) -> Vec<Player<'_>> {
         .collect::<Vec<_>>()
 }
 
-fn cli_command() -> clap::Command<'static> {
+fn cli_command() -> clap::Command {
     clap::Command::new("MPRISctl")
         .version(env!("CARGO_PKG_VERSION"))
         .author("Christoph Rüßler <christoph.ruessler@mailbox.org>")
