@@ -1,4 +1,4 @@
-use clap::{Arg, ArgAction};
+use clap::{Parser, ValueEnum};
 use dbus::ffidisp::{BusType, Connection};
 use dbus::Message;
 use std::fmt;
@@ -83,52 +83,45 @@ fn get_players(conn: &Connection) -> Vec<Player<'_>> {
         .collect::<Vec<_>>()
 }
 
-fn cli_command() -> clap::Command {
-    clap::Command::new("MPRISctl")
-        .version(env!("CARGO_PKG_VERSION"))
-        .author("Christoph Rüßler <christoph.ruessler@mailbox.org>")
-        .about("Sends commands to MPRIS enabled players via DBUS")
-        .arg(
-            Arg::new("list_all")
-                .short('l')
-                .long("list-all")
-                .help("List the names of players that can be controlled")
-                .action(ArgAction::SetTrue),
-        )
-        .arg(
-            Arg::new("COMMAND")
-                .value_parser(["play-pause", "play", "pause", "stop", "next"])
-                .help("The command to send to the player")
-                .action(ArgAction::Set),
-        )
+#[derive(ValueEnum, Clone, Debug)]
+enum Action {
+    /// List the names of players that can be controlled
+    ListAll,
+    PlayPause,
+    Play,
+    Pause,
+    Stop,
+    Next,
+}
+
+#[derive(Parser, Debug)]
+/// Sends commands to MPRIS enabled players via DBUS
+#[command(author, version, about)]
+struct Args {
+    /// The action to perform
+    #[arg(required = false)]
+    action: Action,
 }
 
 fn main() {
     let conn = Connection::get_private(BusType::Session).expect("Could not get DBUS connection");
 
-    let command = cli_command();
-    let matches = command.get_matches();
+    let args = Args::parse();
 
-    if matches.contains_id("list_all") {
-        for p in get_players(&conn) {
-            println!("{}", p);
-        }
-    } else if let Some(first) = get_players(&conn).first() {
-        match matches.get_one::<String>("COMMAND").map(|s| s.as_str()) {
-            Some("play-pause") => first.play_pause(),
-            Some("play") => first.play(),
-            Some("pause") => first.pause(),
-            Some("stop") => first.stop(),
-            Some("next") => first.next(),
-
-            _ => println!("Unknown command"),
+    if let Some(first) = get_players(&conn).first() {
+        match args.action {
+            Action::ListAll => {
+                for p in get_players(&conn) {
+                    println!("{}", p);
+                }
+            }
+            Action::PlayPause => first.play_pause(),
+            Action::Play => first.play(),
+            Action::Pause => first.pause(),
+            Action::Stop => first.stop(),
+            Action::Next => first.next(),
         }
     } else {
         println!("No player found")
     }
-}
-
-#[test]
-fn verify_cli() {
-    cli_command().debug_assert();
 }
